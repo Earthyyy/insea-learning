@@ -1,0 +1,219 @@
+@startuml
+' User Management
+class User {
+  +String id
+  +String username
+  +String email
+  +String passwordHash
+  +DateTime lastLogin
+}
+
+class Profile {
+  +String firstName
+  +String lastName
+  +DateTime dateOfBirth
+  +String biography
+}
+
+class Role {
+  +String id
+  +String name
+}
+
+class Permission {
+  +String id
+  +String name
+  +String description
+}
+
+' Course Management
+class Course {
+  +String id
+  +String title
+  +String target
+  +String description
+  +int duration
+  +String requirements
+  +Double price
+  +Date createdAt
+  
+}
+
+class PresentationVideo {
+  +String id
+  +String title
+  +String url
+}
+
+class ForumQuestion {
+  +String id
+  +String content
+  +DateTime createdAt
+}
+
+class ForumAnswer {
+  +String id
+  +String content
+  +DateTime createdAt
+}
+
+class LiveSession {
+  +String id
+  +DateTime scheduledTime
+  +String meetingUrl
+}
+class Period {
+  +String id
+  +Date startDate
+  +Date endDate
+  +Boolean isCurrent
+}
+
+
+class Category {
+  +String id
+  +String label
+  +Boolean isSubcategory
+  
+}
+
+class Module {
+  +String id
+  +String title
+  +String description
+}
+
+class Lesson {
+  +String id
+  +String title
+  +String content
+  +Boolean isPreview
+}
+
+
+
+
+
+class Media {
+  +String id
+  +String type
+  +String url
+}
+
+class Instructor extends User {
+}
+
+class Admin extends User {
+}
+
+class Student extends User {
+}
+
+class Review {
+  +String id
+  +int rating
+  +String feedback
+}
+
+' Content Delivery
+class Resource {
+  +String id
+  +String title
+  +ContentType type
+  +String url
+}
+
+enum ContentType {
+  VIDEO
+  DOCUMENT
+}
+
+
+
+' Assessment Engine
+class Assessment {
+  +String id
+  +String title
+  +int successThreshold
+}
+
+class Quiz extends Assessment {
+}
+
+class CertificationExam extends Assessment {
+  +String description
+  +int duration
+}
+
+class AssessmentHistory {
+  +String id
+  +Double grade
+  +DateTime passedAt
+  +int correctAnswers
+  +int falseAnswers
+  +Boolean passed
+}
+
+
+
+class Question {
+  +String id
+  +String text
+}
+
+class AnswerOption {
+  +String id
+  +String text
+}
+
+
+' Relationships
+User "1" -- "1" Profile : has >
+User "1" -- "*" Role : has >
+Role "1" -- "*" Permission : has >
+Course "1" -- "1" Instructor : taught by >
+Course "1" -- "*" Module : consists of >
+Module "1" -- "*" Lesson : includes >
+Lesson "1" -- "*" Media : contains >
+Lesson "1" -- "*" Resource : uses >
+Assessment "1" -- "*" Question : includes >
+Question "1" -- "1..*" AnswerOption : has >
+Question "1" -- "1..*" AnswerOption : correct answer >
+Module "1" -- "1" Quiz : has > 
+Course "1" -- "1" CertificationExam : has > 
+Instructor "1" -- "*" LiveSession : schedules >
+
+' Enrollment (Many-to-Many between User and Course)
+class Enrollment {
+  +DateTime enrolledOn
+  +DateTime processedOn
+  +Boolean confirmed
+}
+
+Student "1" -- "*" Enrollment : "enrolled in" >
+Course "*" -- "*" Enrollment : "has" >
+Admin "1" -- "*" "Enrollment" : confirms >
+Admin "1" -- "*" "Course" : creates >
+
+Student "1" -- "*" Review : has >
+Course "1" -- "*" Review : has >
+
+Category "1" -- "*" Category : "is parent of" >
+Course "1" -- "1" Category : "has a category of " >
+Course "1" -- "1" Category : "has a subcategory of " >
+Course "1" -- "*" Period : has >
+Course "1" -- "*" ForumQuestion : has >
+ForumQuestion "1" -- "*" ForumAnswer : has >
+ForumAnswer "1" -- "1" User : "answered by" >
+ForumQuestion "1" -- "1" Student : "asked by" >
+
+Assessment "1" -- "*" AssessmentHistory : has >
+Student "1" -- "*" AssessmentHistory : has >
+
+Student "*" -- "*" Course : "has completed" >
+Student "*" -- "*" Lesson : "has completed" >
+
+Course "1" -- "1" PresentationVideo : has >
+
+Module "1" -- "*" LiveSession : has >
+@enduml
