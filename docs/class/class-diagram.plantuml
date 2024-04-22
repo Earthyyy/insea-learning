@@ -181,14 +181,29 @@ Instructor "1" -- "*" LiveSession : schedules >
 class Enrollment {
   +DateTime enrolledOn
   +DateTime processedOn
-  +Boolean confirmed
+  +EnrollmentStatus status
+}
+
+enum EnrollmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELED
+  ACTIVE
+}
+
+
+class EnrollmentDetails {
+  +String background
+  +String motivation
+
 }
 
 Student "1" -- "*" Enrollment : "enrolled in" >
 Course "*" -- "*" Enrollment : "has" >
 Admin "1" -- "*" "Enrollment" : confirms >
 Admin "1" -- "*" "Course" : creates >
-
+Enrollment "1" -- "1" EnrollmentDetails : has >
 Student "1" -- "*" Review : has >
 Course "1" -- "*" Review : has >
 
