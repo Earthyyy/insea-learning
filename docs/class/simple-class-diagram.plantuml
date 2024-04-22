@@ -1,0 +1,88 @@
+@startuml
+' User Management
+class User {
+}
+
+
+
+
+
+' Course Management
+class Course {
+}
+
+
+
+class LiveSession {
+}
+
+
+class Category {
+}
+
+class Module {
+}
+
+class Lesson {
+}
+
+
+
+
+
+
+class Instructor extends User {
+}
+
+class Admin extends User {
+}
+
+class Student extends User {
+}
+
+
+' Content Delivery
+
+
+
+
+' Assessment Engine
+
+class CertificationExam{ 
+}
+
+
+
+
+
+
+
+' Relationships
+Course "1" -- "1" Instructor : taught by >
+Course "1" -- "*" Module : consists of >
+Module "1" -- "*" Lesson : includes >
+Module "1" -- "1" Quiz : has > 
+Course "1" -- "1" CertificationExam : has > 
+Instructor "1" -- "*" LiveSession : schedules >
+
+' Enrollment (Many-to-Many between User and Course)
+class Enrollment {
+}
+
+
+Student "1" -- "*" Enrollment : "enrolled in" >
+Course "*" -- "*" Enrollment : "has" >
+Admin "1" -- "*" "Enrollment" : confirms >
+Admin "1" -- "*" "Course" : creates >
+
+Category "1" -- "*" Category : "is parent of" >
+Course "1" -- "1" Category : "has a category of " >
+Course "1" -- "1" Category : "has a subcategory of " >
+
+
+Student "*" -- "*" Course : "has completed" >
+Student "*" -- "*" Lesson : "has completed" >
+
+
+Module "1" -- "*" LiveSession : has >
+@enduml
