@@ -3,28 +3,25 @@
 class User {
   +String id
   +String username
+  +String firstName
+  +String lastName
+  +Date dateOfBirth
+  +String imageUrl
+  +String bio
+  +Role role
   +String email
   +String passwordHash
   +DateTime lastLogin
 }
 
-class Profile {
-  +String firstName
-  +String lastName
-  +DateTime dateOfBirth
-  +String biography
+enum Role {
+  ADMIN
+  STUDENT
+  INSTRUCTOR
 }
 
-class Role {
-  +String id
-  +String name
-}
 
-class Permission {
-  +String id
-  +String name
-  +String description
-}
+
 
 ' Course Management
 class Course {
@@ -168,9 +165,6 @@ class AnswerOption {
 
 
 ' Relationships
-User "1" -- "1" Profile : has >
-User "1" -- "*" Role : has >
-Role "1" -- "*" Permission : has >
 Course "1" -- "1" Instructor : taught by >
 Course "1" -- "*" Module : consists of >
 Module "1" -- "*" Lesson : includes >
