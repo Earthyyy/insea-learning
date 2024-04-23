@@ -1,0 +1,180 @@
+@startuml entity-association
+!theme plain
+entity User {
+  +String id
+  +String username
+  +String firstName
+  +String lastName
+  +Date dateOfBirth
+  +String imageUrl
+  +String bio
+  +String role
+  +String email
+  +String passwordHash 
+  +DateTime lastLogin
+}
+
+
+entity Course {
+  +String id
+  +String title
+  +String target
+  +String description
+  +int duration
+  +String requirements
+  +Double price
+  +Date createdAt  
+}
+
+
+entity Category {
+  +String id
+  +String label
+  +Boolean isSubcategory  
+}
+
+entity Module {
+  +String id
+  +String title
+  +String description
+}
+
+entity Lesson {
+  +String id
+  +String title
+  +String content
+  +Boolean isPreview
+}
+
+entity Media {
+  +String id
+  +String type
+  +String url
+}
+
+entity PresentationVideo {
+  +String id
+  +String title
+  +String url
+}
+
+entity Resource {
+  +String id
+  +String title
+  +ContentType type
+  +String url
+}
+
+
+
+entity Assessment {
+  +String id
+  +String title
+  +int successThreshold
+}
+
+entity Quiz { 
+  -- PK from Assessment
+}
+
+entity CertificationExam {
+  -- PK from Assessment
+  +String description
+  +int duration
+}
+
+entity Question {
+  +String id
+  +String text
+}
+
+entity AnswerOption {
+  +String id
+  +String text
+}
+
+entity ForumQuestion {
+  +String id
+  +String content
+  +DateTime createdAt
+}
+
+entity ForumAnswer {
+  +String id
+  +String content
+  +DateTime createdAt
+}
+
+entity Review {
+  +String id
+  +int rating
+  +String feedback
+}
+
+entity Enrollment {
+  +DateTime enrolledOn
+  +DateTime processedOn
+  +EnrollmentStatus status
+}
+
+
+
+entity EnrollmentDetails {
+  +String background
+  +String motivation
+}
+
+entity AssessmentHistory {
+  +String id
+  +Double grade
+  +DateTime passedAt
+  +int correctAnswers
+  +int falseAnswers
+  +Boolean passed
+}
+
+entity LiveSession {
+  +String id
+  +DateTime scheduledTime
+  +String meetingUrl
+}
+
+entity Period {
+  +String id
+  +Date startDate
+  +Date endDate
+  +Boolean isCurrent
+}
+
+
+' Relationships (with some changes discussed below)
+Course "1" -- "*" Module
+Module "1" -- "*" Lesson 
+Lesson "1" -- "*" Media
+Lesson "1" -- "*" Resource 
+Assessment "1" -- "*" Question 
+Question "1" -- "*" AnswerOption 
+Question "*" -- "1" AnswerOption 
+Module "1" -- "1" Quiz 
+Course "1" -- "1" CertificationExam 
+Quiz "1" -- "1" Assessment
+
+Course "*" -- "*" Enrollment  
+Enrollment "1" -- "1" EnrollmentDetails
+Course "1" -- "*" Review  
+
+Category "*" -- "1" Category 
+Course "1" -- "1" Category 
+Course "1" -- "*" Period 
+Course "1" -- "*" ForumQuestion  
+ForumQuestion "*" -- "1" ForumAnswer 
+ForumAnswer "1" -- "1" User 
+CertificationExam "1" -- "1" Assessment
+
+Assessment "*" -- "1" AssessmentHistory 
+
+
+Course "1" -- "1" PresentationVideo 
+
+Module "*" -- "1" LiveSession
+@enduml

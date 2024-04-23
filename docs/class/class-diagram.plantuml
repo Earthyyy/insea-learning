@@ -1,5 +1,4 @@
-@startuml
-' User Management
+@startuml classDiagram
 class User {
   +String id
   +String username
@@ -12,6 +11,8 @@ class User {
   +String email
   +String passwordHash
   +DateTime lastLogin
+
+  +JWTToken login(String email, String password)
 }
 
 enum Role {
@@ -98,12 +99,19 @@ class Media {
 }
 
 class Instructor extends User {
+  + void answerQuestionOnForum(Instructor currInstructor, long questionId, String answer, long courseId) 
 }
 
 class Admin extends User {
+  + void createCourse(Admin currAdmin, Course course)
+  + void confirmStudentEnrollement(long studentId, long courseId)
 }
 
 class Student extends User {
+  + void reviewCourse(Student currStudent, long courseId, Review review)
+  + void submitAssessement(Student currStudent, long courseId, long assessementId, Submission submission)
+  + void completeLesson(Student currStudent, long courseId, long lessonId)
+  + void enrollCourse(Student currStudent, long courseId)
 }
 
 class Review {
